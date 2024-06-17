@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, redirect
 import mysql.connector
 
 import requests
@@ -33,21 +33,13 @@ query.execute("USE " + database_name)
 
 #  TODO: create tables if not present
 
-#  CREATE TABLE users (
-#  user_id INT AUTO_INCREMENT PRIMARY KEY,
-#  discord_id VARCHAR(255) UNIQUE NOT NULL,
-#  name VARCHAR(255) NOT NULL,
-#  token VARCHAR(255) NOT NULL,
-#  refresh_token VARCHAR(255) NOT NULL
-#  );
+query.execute(
+    "CREATE TABLE IF NOT EXISTS users (user_id INT AUTO_INCREMENT PRIMARY KEY, discord_id VARCHAR(255) UNIQUE NOT NULL, name VARCHAR(255) NOT NULL, token VARCHAR(255) NOT NULL, refresh_token VARCHAR(255) NOT NULL)"
+)
+query.execute(
+    "CREATE TABLE IF NOT EXISTS clips (clip_id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL, file VARCHAR(255) NOT NULL, author_id VARCHAR(255) NOT NULL, FOREIGN KEY (author_id) REFERENCES users(discord_id))"
+)
 
-#  CREATE TABLE clips (
-#  clip_id INT AUTO_INCREMENT PRIMARY KEY,
-#  name VARCHAR(255) NOT NULL,
-#  file VARCHAR(255) NOT NULL,
-#  author_id VARCHAR(255) NOT NULL,
-#  FOREIGN KEY (author_id) REFERENCES users(discord_id)
-#  );
 
 app = Flask(__name__)
 
@@ -55,6 +47,14 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     return "Hello, World!"
+
+
+@app.route("/login")
+def login():
+    # redirect to discord oauth2
+    return redirect(
+        f"https://discord.com/api/oauth2/authorize?client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}&response_type=code&scope=identify"
+    )
 
 
 @app.route("/users")
