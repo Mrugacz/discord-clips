@@ -1,0 +1,15 @@
+{
+  "database": {
+    "host": "localhost",
+    "user": "db_user",
+    "password": "notSecureChangeMe",
+    "name": "discord_clips"
+  },
+  "discord": {
+    "api_endpoint": "https://discord.com/api/v10",
+    "client_id": "XXXXXXXXXXXXXXXXXXX",
+    "client_secret": "YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY",
+    "redirect_uri": "http://bot-domain.xyz/oauth",
+    "allowed_servers": ["000000000000000000", "111111111111111111"]
+  }
+}
